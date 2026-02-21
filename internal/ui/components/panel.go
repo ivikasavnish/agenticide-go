@@ -51,7 +51,7 @@ style = style.Height(p.height - 4)
 
 var sb strings.Builder
 if p.title != "" {
-sb.WriteString(ui.RenderTitle(p.title))
+sb.WriteString(ui.Title(p.title))
 sb.WriteString("\n")
 }
 sb.WriteString(style.Render(p.content))

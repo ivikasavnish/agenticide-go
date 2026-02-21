@@ -63,15 +63,15 @@ status := ""
 if i < len(statuses) {
 switch statuses[i] {
 case "done":
-status = ui.RenderSuccess("")
+status = ui.Success("")
 case "pending":
-status = ui.RenderMuted("○")
+status = ui.Muted("○")
 case "in_progress":
-status = ui.RenderInfo("◐")
+status = ui.Info("◐")
 case "error":
-status = ui.RenderError("")
+status = ui.Error("")
 default:
-status = ui.RenderMuted("○")
+status = ui.Muted("○")
 }
 }
 
