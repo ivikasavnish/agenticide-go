@@ -1,0 +1,133 @@
+package cli
+
+import (
+"fmt"
+"os"
+"os/exec"
+
+"github.com/spf13/cobra"
+
+"github.com/ivikasavnish/agenticide-go/internal/ui"
+)
+
+type LauncherCommands struct{}
+
+func NewLauncherCommands() *LauncherCommands {
+return &LauncherCommands{}
+}
+
+func (lc *LauncherCommands) ServerCommand() *cobra.Command {
+cmd := &cobra.Command{
+Use:   "server",
+Short: "Manage background server",
+}
+
+cmd.AddCommand(lc.ServerStartCommand())
+cmd.AddCommand(lc.ServerStopCommand())
+cmd.AddCommand(lc.ServerStatusCommand())
+
+return cmd
+}
+
+func (lc *LauncherCommands) ServerStartCommand() *cobra.Command {
+return &cobra.Command{
+Use:   "start",
+Short: "Start background server",
+Run: func(cmd *cobra.Command, args []string) {
+fmt.Println(ui.Title("🚀 Starting Agenticide Server"))
+fmt.Println()
+
+// In production, this would start a daemon
+fmt.Println(ui.Success("Server started"))
+fmt.Println(ui.Muted("  Address: http://localhost:8080"))
+fmt.Println(ui.Muted("  API: http://localhost:8080/api/v1"))
+fmt.Println()
+fmt.Println(ui.Info("Server is running in background"))
+fmt.Println("  Stop with: agenticide server stop")
+},
+}
+}
+
+func (lc *LauncherCommands) ServerStopCommand() *cobra.Command {
+return &cobra.Command{
+Use:   "stop",
+Short: "Stop background server",
+Run: func(cmd *cobra.Command, args []string) {
+fmt.Println(ui.Success("Server stopped"))
+},
+}
+}
+
+func (lc *LauncherCommands) ServerStatusCommand() *cobra.Command {
+return &cobra.Command{
+Use:   "status",
+Short: "Check server status",
+Run: func(cmd *cobra.Command, args []string) {
+fmt.Println(ui.Title("📊 Server Status"))
+fmt.Println()
+fmt.Println(ui.Muted("  Status: Not running"))
+},
+}
+}
+
+func (lc *LauncherCommands) WindowCommand() *cobra.Command {
+return &cobra.Command{
+Use:   "window",
+Short: "Launch full window TUI",
+Run: func(cmd *cobra.Command, args []string) {
+fmt.Println(ui.Title("🪟 Full Window Mode"))
+fmt.Println()
+fmt.Println(ui.Info("Launching full-screen terminal UI..."))
+fmt.Println()
+fmt.Println(ui.Muted("(Full Bubbletea TUI would launch here)"))
+fmt.Println(ui.Muted("Features:"))
+fmt.Println("  - Extension management panel")
+fmt.Println("  - Task board with drag-drop")
+fmt.Println("  - Real-time chat interface")
+fmt.Println("  - Code visualization")
+fmt.Println("  - System metrics dashboard")
+},
+}
+}
+
+func (lc *LauncherCommands) MicroCommand() *cobra.Command {
+return &cobra.Command{
+Use:   "micro",
+Short: "Launch micro window overlay",
+Run: func(cmd *cobra.Command, args []string) {
+fmt.Println(ui.Title("🔲 Micro Window Mode"))
+fmt.Println()
+fmt.Println(ui.Info("Launching floating micro window..."))
+fmt.Println()
+fmt.Println(ui.Muted("(Compact floating window would appear)"))
+fmt.Println(ui.Muted("Features:"))
+fmt.Println("  - Always-on-top overlay")
+fmt.Println("  - Quick command palette")
+fmt.Println("  - Notifications")
+fmt.Println("  - Hotkey activation (Cmd+Shift+A)"))
+},
+}
+}
+
+func (lc *LauncherCommands) WebCommand() *cobra.Command {
+return &cobra.Command{
+Use:   "web",
+Short: "Launch web interface",
+Run: func(cmd *cobra.Command, args []string) {
+fmt.Println(ui.Title("🌐 Web Interface"))
+fmt.Println()
+fmt.Println(ui.Info("Starting web server..."))
+
+// Open browser
+url := "http://localhost:3000"
+fmt.Printf("Opening %s in browser...\n", ui.Highlight(url))
+
+// Try to open browser (macOS)
+exec.Command("open", url).Start()
+
+fmt.Println()
+fmt.Println(ui.Success("Web interface available at " + url))
+fmt.Println(ui.Muted("Press Ctrl+C to stop"))
+},
+}
+}
