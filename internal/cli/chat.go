@@ -1,0 +1,114 @@
+package cli
+
+import (
+"bufio"
+"context"
+"fmt"
+"os"
+"strings"
+"time"
+
+"github.com/spf13/cobra"
+
+"github.com/ivikasavnish/agenticide-go/internal/core/extension"
+"github.com/ivikasavnish/agenticide-go/internal/ui"
+)
+
+type ChatCommands struct {
+ctx extension.ExtensionContext
+}
+
+func NewChatCommands(ctx *extension.ExtensionContext) *ChatCommands {
+return &ChatCommands{
+ctx: *ctx,
+}
+}
+
+func (cc *ChatCommands) ChatCommand() *cobra.Command {
+cmd := &cobra.Command{
+Use:   "chat",
+Short: "Start interactive chat session",
+Run: func(cmd *cobra.Command, args []string) {
+ultraloop, _ := cmd.Flags().GetBool("ultraloop")
+ultrathink, _ := cmd.Flags().GetBool("ultrathink")
+
+fmt.Println(ui.Title("🤖 Agenticide Chat"))
+fmt.Println()
+
+if ultraloop {
+fmt.Println(ui.Badge("ULTRALOOP") + ui.Muted(" Loop until complete"))
+}
+if ultrathink {
+fmt.Println(ui.Badge("ULTRATHINK") + ui.Muted(" Deep reasoning mode"))
+}
+if ultraloop || ultrathink {
+fmt.Println()
+}
+
+fmt.Println(ui.Success("Chat session started"))
+fmt.Println(ui.Muted("Type 'exit' or 'quit' to end session"))
+fmt.Println()
+
+cc.ctx.SetMetadata("ultraloop", fmt.Sprintf("%t", ultraloop))
+cc.ctx.SetMetadata("ultrathink", fmt.Sprintf("%t", ultrathink))
+
+scanner := bufio.NewScanner(os.Stdin)
+
+for {
+fmt.Print(ui.HighlightStyle.Render("You") + " > ")
+
+if !scanner.Scan() {
+break
+}
+
+input := strings.TrimSpace(scanner.Text())
+
+if input == "" {
+continue
+}
+
+if input == "exit" || input == "quit" {
+fmt.Println()
+fmt.Println(ui.Success("Chat session ended"))
+break
+}
+
+// Simulate AI response (placeholder for actual LLM integration)
+fmt.Println()
+cc.processMessage(input, ultraloop, ultrathink)
+fmt.Println()
+}
+},
+}
+
+cmd.Flags().Bool("ultraloop", false, "Loop until complete")
+cmd.Flags().Bool("ultrathink", false, "Deep reasoning mode")
+
+return cmd
+}
+
+func (cc *ChatCommands) processMessage(message string, ultraloop, ultrathink bool) {
+fmt.Print(ui.SuccessStyle.Render("AI") + " > ")
+
+if ultrathink {
+fmt.Print(ui.Muted("(thinking deeply...) "))
+time.Sleep(500 * time.Millisecond)
+}
+
+// Placeholder response
+if strings.Contains(strings.ToLower(message), "task") {
+fmt.Println("I can help you manage tasks. Use 'agenticide task list' to see all tasks.")
+} else if strings.Contains(strings.ToLower(message), "extension") {
+fmt.Println("Use 'agenticide ext list' to see all available extensions.")
+} else if strings.Contains(strings.ToLower(message), "help") {
+fmt.Println("Available commands:")
+fmt.Println("  - task list/add/complete/graph")
+fmt.Println("  - ext list/enable/disable/info")
+fmt.Println("  - plan <requirement>")
+} else {
+fmt.Printf("You said: %s\n", message)
+if ultraloop {
+fmt.Println(ui.Muted("(Ultraloop mode: will retry on failures)"))
+}
+}
+}
