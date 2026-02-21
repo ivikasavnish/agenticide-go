@@ -104,7 +104,7 @@ fmt.Println(ui.Muted("Features:"))
 fmt.Println("  - Always-on-top overlay")
 fmt.Println("  - Quick command palette")
 fmt.Println("  - Notifications")
-fmt.Println("  - Hotkey activation (Cmd+Shift+A)")
+fmt.Println("  - Hotkey activation (Cmd+Shift+A)"))
 },
 }
 }
