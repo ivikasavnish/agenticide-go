@@ -43,7 +43,6 @@ v.SetDefault("storage_path", filepath.Join(os.TempDir(), "agenticide.db"))
 v.SetDefault("extensions_enabled", []string{})
 v.SetDefault("ultraloop_max_retries", 10)
 v.SetDefault("ultrathink_timeout", "5m")
-v.SetDefault("setup_complete", false)
 
 if err := v.ReadInConfig(); err != nil {
 if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
