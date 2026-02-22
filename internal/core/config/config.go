@@ -94,3 +94,16 @@ c.mu.Lock()
 defer c.mu.Unlock()
 return c.v.WriteConfig()
 }
+
+
+
+func (c *Config) Save() error {
+c.mu.Lock()
+defer c.mu.Unlock()
+
+err := c.v.WriteConfig()
+if err != nil {
+return c.v.SafeWriteConfig()
+}
+return nil
+}
